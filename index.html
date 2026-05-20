@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ميثاق الحب - عبدالله وشهده</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;700&family=Reem+Kufi:wght@500;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --royal-red: #8b1e23;
+            --classic-black: #111111;
+            --soft-cream: #faf7f2;
+            --dark-gold: #c5a880;
+            --text-color: #2b2b2b;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--soft-cream);
+            color: var(--text-color);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #petalCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* شاشة البداية الملكية */
+        .landing-page {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(135deg, var(--classic-black) 0%, #290507 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* تعديل: تصغير خط "عقد قران" وجعله مرن ومتزن بين اللابتوب والموبايل تلقائياً */
+        .landing-type {
+            font-family: 'Amiri', serif;
+            font-size: calc(2.2rem + 1.5vw); /* حجم خط متزن ودايناميكي */
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 10px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            line-height: 1.2;
+        }
+
+        /* صف الأسماء المحدث */
+        .landing-names-row {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: calc(1.8rem + 1.2vw); /* حجم متناسب مع الشاشات */
+            color: var(--dark-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .names-icon {
+            width: calc(45px + 2vw);
+            height: calc(45px + 2vw);
+            animation: heartbeat 1.6s infinite ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            45% { transform: scale(1.04); }
+            60% { transform: scale(1.15); }
+        }
+
+        /* تعديل: مساحة البصمة تم نقلها لتصبح تحت الأسماء مباشرة */
+        .fingerprint-area {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed var(--dark-gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 0 25px rgba(197, 168, 128, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .fingerprint-area:hover {
+            transform: scale(1.05);
+            border-color: #ffffff;
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.3);
+        }
+
+        .fingerprint-icon {
+            width: 70px;
+            height: 70px;
+            fill: var(--dark-gold);
+        }
+
+        .instruction-text {
+            font-size: 1rem;
+            color: #ccc;
+            margin-top: 20px;
+            font-weight: 300;
+        }
+
+        /* الموقع الأساسي بالباك جراوند الأنيميشن */
+        .main-site {
+    opacity: 0;
+    display: none;
+    transition: opacity 2s ease;
+    position: relative;
+    min-height: 100vh;
+    
+    /* كود الخلفية الثابتة اللطيفة: تدرج دائري عاجي ملكي ناعم */
+    background: radial-gradient(circle, #ffffff 0%, #f4eee4 100%);
+    background-attachment: fixed;
+}
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(250, 247, 242, 0.88), rgba(250, 247, 242, 0.94));
+            z-index: -1;
+        }
+
+        @keyframes gardenMotion {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(8px, -8px); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* خط مرحبا بكم في فرحه العمر الكبير جداً والمستجيب */
+        .massive-header {
+            font-family: 'Amiri', serif;
+            font-size: clamp(3.5rem, 7vw, 10px); /* يضبط حاله تلقائياً على اللاب والموبايل */
+            color: var(--royal-red);
+            text-align: center;
+            line-height: 1.2;
+            margin: 80px 20px 40px 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card-section {
+            max-width: 850px;
+            margin: 0 auto 60px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 50px 30px;
+            border-radius: 40px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        .quran-verse {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.1rem, 2vw, 1.55rem);
+            color: var(--royal-red);
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .intro-text-ruqaa {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            color: var(--classic-black);
+            margin: 25px 0 35px 0;
+            font-weight: 700;
+            line-height: 2.2rem;
+        }
+
+        .poetic-lines {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.1rem, 2.2vw, 1.65rem);
+            line-height: clamp(2rem, 3.5vw, 2.9rem);
+            color: var(--text-color);
+            margin: 35px 0;
+            background: rgba(253, 252, 249, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            border-right: 6px solid var(--royal-red);
+        }
+
+        .intermediary-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            color: var(--royal-red);
+            font-weight: bold;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        .parents-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 auto 30px auto;
+            gap: 15px;
+            max-width: 95%;
+        }
+
+        .parent-side {
+            width: 45%;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: var(--classic-black);
+            border-bottom: 2px dashed rgba(197, 168, 128, 0.4);
+            padding-bottom: 10px;
+        }
+
+        .parents-connector {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: var(--dark-gold);
+        }
+
+        .couple-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 35px 0;
+        }
+
+        .names-row {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            color: var(--royal-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .dynamic-love-icon {
+            width: clamp(50px, 8vw, 85px);
+            height: clamp(50px, 8vw, 85px);
+            animation: heartbeat 1.6s infinite ease-in-out;
+        }
+
+        .invitation-body-end {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            line-height: 2.4rem;
+            color: #111;
+            margin-top: 25px;
+            font-weight: 500;
+        }
+
+        /* تفاصيل اللقاء المستجيبة */
+        .details-unboxed-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            width: 100%;
+            margin-top: 45px;
+            border-top: 1px solid rgba(197, 168, 128, 0.25);
+            padding-top: 30px;
+        }
+
+        @media (min-width: 600px) {
+            .details-unboxed-grid { grid-template-columns: 1fr 1fr 1fr; }
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .detail-item i { font-size: 2rem; color: var(--dark-gold); margin-bottom: 10px; }
+        .detail-item .label { font-size: 1.2rem; font-weight: bold; color: var(--royal-red); margin-bottom: 5px; }
+        .detail-item .value { font-size: 1.05rem; color: #333; line-height: 1.5rem; }
+
+        .countdown-wrapper {
+            background: linear-gradient(135deg, var(--royal-red) 0%, #5c1114 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .boxes-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+        .box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 15px 25px;
+            border-radius: 20px;
+            min-width: 80px;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .box span { display: block; font-size: 2.2rem; font-weight: bold; }
+
+        .blessings-section {
+            background-color: rgba(244, 239, 233, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background: var(--classic-black);
+            overflow: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            position: relative;
+            height: 60px;
+        }
+
+        .ticker {
+            display: flex;
+            white-space: nowrap;
+            position: absolute;
+            height: 100%;
+            align-items: center;
+            animation: ticker-infinite-loop 510s linear infinite;
+        }
+
+        .ticker-text-item {
+            color: var(--dark-gold);
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0 40px;
+        }
+
+        @keyframes ticker-infinite-loop {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .blessing-form {
+            max-width: 520px;
+            margin: 0 auto;
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+        }
+
+        .blessing-form input, .blessing-form textarea {
+            width: 100%; padding: 14px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 12px;
+            font-family: 'Cairo', sans-serif; box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+
+        .blessing-form button {
+            background-color: var(--royal-red); color: white; border: none;
+            padding: 14px 40px; border-radius: 25px; cursor: pointer;
+            font-size: 1rem; font-weight: bold; transition: 0.3s; margin-top: 10px;
+        }
+        .blessing-form button:hover { background-color: var(--classic-black); }
+
+        .location-section { padding: 100px 20px 130px; text-align: center; }
+
+        .btn-maps-redirect {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--classic-black);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 18px 55px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 35px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-maps-redirect:hover {
+            background-color: var(--royal-red);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(139, 30, 35, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="petalCanvas"></canvas>
+
+    <div class="landing-page" id="landingPage">
+        
+        <p class="landing-type">عَقدُ قِرانِ</p>
+        
+        <div class="landing-names-row">
+            <span>عَبداللّه</span>
+            <span class="names-icon">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <circle cx="38" cy="50" r="22" fill="none" stroke="#c5a880" stroke-width="4" opacity="0.8"/>
+                    <circle cx="62" cy="50" r="22" fill="none" stroke="#8b1e23" stroke-width="4" opacity="0.8"/>
+                    <path d="M50,38 C50,38 44,28 36,34 C28,40 50,66 50,66 C50,66 72,40 64,34 C56,28 50,38 50,38 Z" fill="#8b1e23"/>
+                </svg>
+            </span>
+            <span>شَهْدُهُ</span>
+        </div>
+        
+        <div class="fingerprint-area" onclick="triggerMagicReveal()">
+            <svg class="fingerprint-icon" viewBox="0 0 24 24">
+                <path d="M12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.19,6.2l.27.36a1,1,0,0,0,1.6-1.2l-.27-.36A7.92,7.92,0,0,1,4,12a8,8,0,0,1,16,0,7.92,7.92,0,0,1-1.79,5l-.27.36a1,1,0,1,0,1.6,1.2l.27-.36A9.89,9.89,0,0,0,22,12,10,10,0,0,0,12,2W0Z"/>
+                <path d="M12,6a6,6,0,0,0-6,6,5.92,5.92,0,0,0,1.19,3.6l.27.36a1,1,0,1,0,1.6-1.2l-.27-.36A3.92,3.92,0,0,1,8,12a4,4,0,0,1,8,0,3.92,3.92,0,0,1-.79,2.4l-.27.36a1,1,0,0,0,1.6,1.2l.27-.36A5.92,5.92,0,0,0,18,12,6,6,0,0,0,12,6W0Z"/>
+                <circle cx="12" cy="12" r="2"/>
+            </svg>
+        </div>
+        
+        <p class="instruction-text">بصمتكم تبارک ميثاقنا، اضغط لتشهد وتفتح الدعوة</p>
+    </div>
+
+    <div class="main-site" id="mainSite">
+        
+        <div class="animated-bg"></div>
+        <div class="bg-overlay"></div>
+        
+        <div class="massive-header">مرحبا بكم في فرحه العمر</div>
+
+        <section class="card-section reveal">
+            <div class="quran-verse">بِسمِ الله الرَّحمَنِ الرَّحِيم</div>
+            <div class="quran-verse">"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"</div>
+            
+            <div class="intro-text-ruqaa">الحمد لله الذي ألّف بالحب بين القلوب، وجمعنا على طاعته ورضاه.</div>
+            
+            <div class="poetic-lines">
+                في بهجةِ العمرِ والأيامِ تبتسمُ ... لِعقدِ قَلبينِ كادَ الشوقُ يرتسِمُ<br>
+                نَخطو مَعاً والدّعاءُ العذبُ يسبقُنا ... <span class="highlight">عَبدُاللهِ</span> اليومَ في عُمرٍ بهِ قَسَمُ<br>
+                ويا لِفرحةِ قَلبٍ قد حَظِي بِمُناهُ ... إذ أشرقت في سَماهُ <span class="highlight">"شَهدُهُ"</span> والنِّعَمُ
+            </div>
+
+            <div class="intermediary-title">يتشرف السيدان:</div>
+            <div class="parents-container">
+                <div class="parent-side" style="text-align: right;">السيد عمر صبحي سليمان</div>
+                <div class="parents-connector">وَ</div>
+                <div class="parent-side" style="text-align: left;">السيد عمار يوسف عرفة</div>
+            </div>
+
+            <p style="font-size: 1.25rem; color:#333; font-weight: bold;">بدعوتكم لحضور حفل عقد قران وخطوبة ولديهما:</p>
+
+            <div class="couple-display">
+                <div class="names-row">
+                    <span>عَبداللّه</span>
+                    <span class="dynamic-love-icon">
+                        <svg viewBox="0 0 100 100" width="100%" height="100%">
+                            <circle cx="38" cy="50" r="22" fill="none" stroke="#c5a880" stroke-width="4" opacity="0.8"/>
+                            <circle cx="62" cy="50" r="22" fill="none" stroke="#8b1e23" stroke-width="4" opacity="0.8"/>
+                            <path d="M50,38 C50,38 44,28 36,34 C28,40 50,66 50,66 C50,66 72,40 64,34 C56,28 50,38 50,38 Z" fill="#8b1e23"/>
+                        </svg>
+                    </span>
+                    <span>شَهْدُهُ</span>
+                </div>
+            </div>
+
+            <div class="invitation-body-end">
+                ليتمّ الميثاق الغليظ، وتتشابك الأيدي مباركةً بجمعنا.<br>
+                حضوركم الكريم في منزل والد العروس هو عطرُ ليلتنا، وفرحةٌ تكتمل بها مسرّاتنا.
+            </div>
+
+            <div class="details-unboxed-grid">
+                <div class="detail-item">
+                    <i class="fa-solid fa-house-chimney-heart"></i>
+                    <div class="label">المكان</div>
+                    <div class="value">منزل والد العروس<br>(السيد عمار يوسف عرفة)</div>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div class="label">الزمان</div>
+                    <div class="value">تمام الساعة<br>5:00 مساءً</div>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <div class="label">التاريخ</div>
+                    <div class="value">يوم الخميس،<br>1 أكتوبر 2026</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="countdown-wrapper reveal">
+            <h3 style="font-family: 'Amiri', serif; font-size: 2.2rem; margin-bottom: 5px;">العداد التنازلي للقائنا المنتظر</h3>
+            <div class="boxes-container">
+                <div class="box"><span id="days">00</span>يوم</div>
+                <div class="box"><span id="hours">00</span>ساعة</div>
+                <div class="box"><span id="minutes">00</span>دقيقة</div>
+                <div class="box"><span id="seconds">00</span>ثانية</div>
+            </div>
+        </section>
+
+        <section class="blessings-section reveal">
+            <h2 style="font-family: 'Amiri', serif; color: var(--royal-red); margin-bottom: 25px; font-size: 2rem;">دفتر التهاني والمباركات الرقمي</h2>
+            
+            <div class="ticker-wrap">
+                <div class="ticker" id="tickerContent"></div>
+            </div>
+
+            <div class="blessing-form">
+                <h4 style="margin: 0 0 15px 0; color: var(--classic-black); font-size: 1.1rem;">اكتب تهنئتك للعروسين لتظهر بالشريط أعلاه:</h4>
+                <input type="text" id="guestName" placeholder="اسمك الكريم">
+                <textarea id="guestMessage" rows="3" placeholder="اكتب مباركتك اللطيفة هنا من القلب..."></textarea>
+                <button type="button" onclick="addBlessing()">إرسال التهنئة فوراً</button>
+            </div>
+        </section>
+
+        <section class="location-section reveal">
+            <h2 style="font-family: 'Amiri', serif; color: var(--royal-red); font-size: 2.3rem; margin-bottom: 5px;">موقع حفلنا السعيد</h2>
+            <p style="color: #555; font-size: 1.2rem; margin-bottom: 35px;">منزل والد العروس (السيد عمار يوسف عرفة) - نتشرف بتشريفكم العطر</p>
+            
+            <a href="https://maps.app.goo.gl/xJFG4o3xwdrnAA4Q6?g_st=ic" target="_blank" class="btn-maps-redirect">
+                🚗 اضغط هنا للانتقال مباشرة إلى الموقع عبر تطبيق Google Maps
+            </a>
+        </section>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+        let animationActive = false;
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Petal {
+            constructor(isExplosion = false) {
+                this.x = isExplosion ? window.innerWidth / 2 : Math.random() * canvas.width;
+                this.y = isExplosion ? window.innerHeight / 2 : Math.random() * -canvas.height;
+                this.size = Math.random() * 14 + 8;
+                this.speedX = isExplosion ? (Math.random() - 0.5) * 16 : Math.random() * 1.5 - 0.75;
+                this.speedY = isExplosion ? (Math.random() - 0.5) * 16 : Math.random() * 2 + 1.5;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 2 + 0.5;
+                this.opacity = 1;
+                this.isExplosion = isExplosion;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY; this.rotation += this.rotationSpeed;
+                if (this.isExplosion) { this.opacity -= 0.008; }
+                if (!this.isExplosion && this.y > canvas.height) { this.y = -20; this.x = Math.random() * canvas.width; }
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.beginPath(); ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(139, 30, 35, ${this.opacity})`; ctx.fill(); ctx.restore();
+            }
+        }
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!animationActive && petals.length < 45) { petals.push(new Petal(false)); }
+            for (let i = petals.length - 1; i >= 0; i--) {
+                petals[i].update(); petals[i].draw();
+                if (petals[i].isExplosion && petals[i].opacity <= 0) { petals.splice(i, 1); }
+            }
+            requestAnimationFrame(animatePetals);
+        }
+
+        function triggerMagicReveal() {
+            animationActive = true;
+            for (let i = 0; i < 150; i++) { petals.push(new Petal(true)); }
+            const landing = document.getElementById('landingPage');
+            const main = document.getElementById('mainSite');
+            landing.style.opacity = '0';
+            landing.style.transform = 'scale(1.05) translateY(-100vh)';
+            setTimeout(() => {
+                landing.style.display = 'none'; main.style.display = 'block';
+                setTimeout(() => { main.style.opacity = '1'; animationActive = false; checkReveal(); }, 50);
+            }, 1200);
+        }
+
+        animatePetals();
+        window.addEventListener('scroll', checkReveal);
+        function checkReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const triggerBottom = window.innerHeight / 5 * 4;
+            reveals.forEach(reveal => {
+                const revealTop = reveal.getBoundingClientRect().top;
+                if(revealTop < triggerBottom) { reveal.classList.add('active'); }
+            });
+        }
+
+        const targetDate = new Date("Oct 1, 2026 17:00:00").getTime();
+        const interval = setInterval(function() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+            document.getElementById("days").innerText = d < 10 ? '0' + d : d;
+            document.getElementById("hours").innerText = h < 10 ? '0' + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? '0' + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? '0' + s : s;
+        }, 1000);
+
+        const basePhrases = [
+            "ألف مبروك عبدالله وشهد 💍💖", "بارك الله لكما وجمع بينكما في خير 🎉✨", "أحلى عرسان بالدنيا عبدالله وشهودة!", 
+            "خطوبة مباركة سعيدة زاهرة!", "تهانينا القلبية للعروسين الغاليين!", "دمتم معاً في حب وسعادة أبدية!", 
+            "يوم كتب الكتاب هو بداية أجمل قصة حب!", "نورتم حياتنا عبدالله وشهد 🎉✨", "عقبال الفرحة الكبيرة والبيت العامر!"
+        ];
+        
+        function initLoopingTicker() {
+            const tickerContainer = document.getElementById('tickerContent');
+            let constructedContent = "";
+            for (let i = 0; i < 100; i++) {
+                let phrase = basePhrases[i % basePhrases.length];
+                constructedContent += `<span class="ticker-text-item">✨ ${phrase} &nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+            }
+            tickerContainer.innerHTML = constructedContent + constructedContent;
+        }
+        initLoopingTicker();
+
+        function addBlessing() {
+            const name = document.getElementById('guestName').value.trim();
+            const msg = document.getElementById('guestMessage').value.trim();
+            const ticker = document.getElementById('tickerContent');
+
+            if(name === "" || msg === "") {
+                alert("الرجاء ملء الاسم وكتابة التهنئة اللطيفة أولاً يا غالي.");
+                return;
+            }
+
+            const newBlessingText = `<span class="ticker-text-item">✨ ${msg} (من: ${name}) &nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+            ticker.innerHTML = newBlessingText + ticker.innerHTML;
+
+            document.getElementById('guestName').value = "";
+            document.getElementById('guestMessage').value = "";
+            alert("تمت إضافة تبريكك الجميل لشريط التهاني بنجاح! منورنا دائماً.");
+        }
+    </script>
+</body>
+</html>
